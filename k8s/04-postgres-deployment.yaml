@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: devops-demo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16.9-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: demo-config
+                  key: DB_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: demo-config
+                  key: DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: database
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["/bin/sh", "-c", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: database
+          persistentVolumeClaim:
+            claimName: postgres-data

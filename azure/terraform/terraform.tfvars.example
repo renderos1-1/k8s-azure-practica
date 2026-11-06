@@ -1,0 +1,14 @@
+# Copiar este archivo como terraform.tfvars y reemplazar los valores.
+# Consultar suscripcion: az account show --query id -o tsv
+subscription_id = "REEMPLAZAR_CON_ID_DE_SUSCRIPCION"
+
+# IP publica individual seguida de /32; este valor es ilustrativo.
+ssh_source_cidr = "203.0.113.10/32"
+
+# Configuracion utilizada en la validacion de la practica (noviembre de 2026).
+# La disponibilidad de VM y las restricciones de zona dependen de cada suscripcion.
+location = "mexicocentral"
+vm_size  = "Standard_B2s_v2"
+vm_zone  = "1"
+
+resource_prefix = "devops-k3s"

@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.local.yaml
+kubeconfig*
+.DS_Store
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfplan
+**/terraform.tfvars
+**/*.auto.tfvars
+**/.terraform.tfstate.lock.info
+**/crash.log

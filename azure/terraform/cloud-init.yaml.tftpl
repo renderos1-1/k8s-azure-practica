@@ -1,0 +1,7 @@
+#cloud-config
+# Este archivo se ejecuta solamente dentro de la VM Linux.
+runcmd:
+  - |
+    set -eu
+    curl -fsSL https://get.k3s.io -o /tmp/install-k3s.sh
+    INSTALL_K3S_VERSION='${k3s_version}' sh /tmp/install-k3s.sh

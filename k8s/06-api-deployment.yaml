@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-api
+  namespace: devops-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-api
+  template:
+    metadata:
+      labels:
+        app: demo-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/REEMPLAZAR_USUARIO/REEMPLAZAR_REPOSITORIO:sha-REEMPLAZAR_COMMIT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: demo-config
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 30m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
