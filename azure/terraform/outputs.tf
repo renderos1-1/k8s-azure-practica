@@ -9,3 +9,8 @@ output "ssh_command" {
 }
 
 # PRACTICA: agregar un output resource_group_name que muestre el grupo de recursos.
+
+output "resource_group_name" {
+  description = "Nombre del grupo de recursos creado por Terraform."
+  value       = azurerm_resource_group.lab.name
+}
