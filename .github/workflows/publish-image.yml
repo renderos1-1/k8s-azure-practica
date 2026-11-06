@@ -36,7 +36,7 @@ jobs:
           context: ./app
           file: ./app/Dockerfile
           # PRACTICA: cambiar false por true para publicar la imagen.
-          push: false
+          push: true
           tags: ghcr.io/${{ github.repository }}:sha-${{ github.sha }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
